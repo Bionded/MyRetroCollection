@@ -1,0 +1,14 @@
+anyio~=3.5.0
+asgiref~=3.5.0
+click~=8.1.2
+fastapi~=0.75.2
+h11~=0.13.0
+idna~=3.3
+pip~=21.1.2
+pydantic~=1.9.0
+setuptools~=57.0.0
+sniffio~=1.2.0
+starlette~=0.17.1
+typing-extensions~=4.2.0
+uvicorn~=0.17.6
+wheel~=0.36.2
