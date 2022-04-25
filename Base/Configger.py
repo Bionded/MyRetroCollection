@@ -2,7 +2,7 @@ import configparser
 import logging
 
 
-class Configger:
+class configger:
     def __init__(self, _config_path='config/base.conf', _section="base",_logger=None):
         self.config = configparser.ConfigParser(interpolation=None)
         self.config_file = _config_path

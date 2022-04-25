@@ -3,16 +3,17 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 import logging
 from api import apiv1
-from classes import logger, configger
+from Base import Logger, Configger
+from Base.Backend.Classes import Rom
+
+
 
 conf_path = "config/base.conf"
 main_logger = logger.load_logger(conf_path, _name=__name__)
 server = configger.Configger(conf_path, "Server", _logger=main_logger)
 
-
 app = FastAPI()
 app.include_router(apiv1.api_v1_router)
-
 
 @app.get("/")
 async def root():
