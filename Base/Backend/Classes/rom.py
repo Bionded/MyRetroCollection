@@ -1,10 +1,10 @@
 import json
 
-class base_rom:
+class Base_rom:
     def __init__(self, _id=-1, _name='', _description='', _md5sum='', _path='',
                  _platform='', _full_name='', _genre='', _rating='',_language='',
                  _developer='', _publisher='', _summary='', _release='', _players=0,
-                 _boxart_path='', _video_path='',_logo=''):
+                 _boxart_path='', _screenshot_path='', _video_path='', _logo=''):
         self.id = _id
         self.name = _name
         self.description = _description
@@ -21,6 +21,7 @@ class base_rom:
         self.release = _release
         self.players = _players
         self.boxart_path = _boxart_path
+        self.screenshot_path = _screenshot_path
         self.video_path = _video_path
         self.logo = _logo
 

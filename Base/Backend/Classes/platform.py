@@ -1,7 +1,8 @@
 import json
+from tinydb import TinyDB, Query,table
+from Base.Backend.Classes import rom
 
-
-class base_platoform:
+class Base_platoform:
     def __init__(self, _id=-1, _name='', _description='', _folder='', _full_name='',
                  _developer='', _summary='', _release='', _extensions=''):
         self.id = _id
@@ -13,6 +14,7 @@ class base_platoform:
         self.summary = _summary
         self.release = _release
         self.extensions = _extensions
+
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -27,4 +29,10 @@ class base_platoform:
 
         self.__dict__.update(**defaults)
 
-    # def scan(self):
+class tiny_table_platform:
+    def __init__(self, _db_path=''):
+        self.db_path = _db_path
+        self.DB = TinyDB(_db_path)
+        self.platform_confs = TinyDB.table('platform')
+        self.roms_table = TinyDB.table('roms')
+

@@ -1,9 +1,9 @@
 import logging
 import os
-from Base import Configger
+from Base import configger
 
-def load_logger(_confpath="config/base.conf",_name="base"):
-    conf = Configger.configger(_config_path=_confpath, _section="Logs")
+def load_logger(_confpath="config/base.conf",_name="__main__"):
+    conf = configger.Configger(_config_path=_confpath, _section="Logs")
     log_file = conf.get("log_file", "Logs/log.log")
     log_dir = os.path.dirname(log_file)
     formatting = conf.get("format", '%(asctime)s %(levelname)-8s %(message)s')

@@ -2,16 +2,13 @@ import configparser
 import logging
 
 
-class configger:
-    def __init__(self, _config_path='config/base.conf', _section="base",_logger=None):
+class Configger:
+    def __init__(self, _config_path='config/base.conf', _section="base", _logger=logging.getLogger("__main__")):
         self.config = configparser.ConfigParser(interpolation=None)
         self.config_file = _config_path
         self.config.read(self.config_file)
         self.section = _section
-        if _logger == None:
-            self.logger = logging
-        else:
-            self.logger = _logger
+        self.logger = _logger
         self.logger.debug(msg=f"Config {self.section} initiated!")
         if self.section not in self.config.sections():
             self.logger.info(msg=f"In config file '{self.config_file}', Section '{self.section}' not exist! Creating.")
