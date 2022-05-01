@@ -1,7 +1,5 @@
-import os.path
 import time
-from multiprocessing import pool, Process
-from Base.Backend.Classes import rom, platform
+from Base.Backend.Classes import rom, collection, importer
 from tinydb import TinyDB, Query
 import logging
 from Base import configger
@@ -10,6 +8,8 @@ from os.path import isfile, join, isdir, exists, splitext
 import hashlib
 from queue import Queue
 import threading
+from watchdog.observers import Observer
+from watchdog.events import PatternMatchingEventHandler
 
 class Rom_scanner:
     def __init__(self, _conf_path="config/base.conf", _logger=logging.getLogger("__main__")):
@@ -18,8 +18,10 @@ class Rom_scanner:
         self.base_rom_folder = self.scan_config.get("base_folder", "ROMS")
         self.platform_dbs_dir = self.scan_config.get("platforms_db", "DB/platforms")
         self.max_threads = self.scan_config.get_int("max_threads", 1)
+        self.platform_dbs = self.load_collections()
+        self.importers = importer.Importer()
 
-        self.platform_dbs = self.load_platforms()
+
         self.files_dict = {}
         self.queue = Queue()
         self.start_threads()
@@ -40,7 +42,7 @@ class Rom_scanner:
             thread.join()
             self.queue.task_done()
 
-    def load_platforms(self):
+    def load_collections(self):
         platforms = {}
         configs = []
         if not exists(self.platform_dbs_dir):
@@ -53,28 +55,48 @@ class Rom_scanner:
         if configs != []:
             for conf in configs:
                 name = splitext(conf)[0]
-                platforms[name] = TinyDB(join(self.platform_dbs_dir, conf))
-                self.logger.info(f"Platform {name} loaded!")
+                try:
+                    platforms[name] = TinyDB(join(self.platform_dbs_dir, conf))
+                    self.logger.info(f"Platform {name} loaded!")
+                except Exception as e:
+                    self.logger.error(f"Error when {name} loading!")
+                    self.logger.error(f"{e}")
         else:
             self.logger.info("No db files for platforms")
         return platforms
 
-    def add_platform(self, _platform_name):
+    def add_platform(self, _collection : collection.Collection):
         if not exists(self.platform_dbs_dir):
             makedirs(self.platform_dbs_dir)
-        self.platform_dbs[_platform_name] = TinyDB(join(self.platform_dbs_dir, _platform_name))
+        self.platform_dbs[_collection.name] = TinyDB(join(self.platform_dbs_dir, _collection.name + '.json'))
 
-    def md5(self, fname):
-        hash_md5 = hashlib.md5()
-        with open(fname, "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                hash_md5.update(chunk)
-        return hash_md5.hexdigest()
+
+    def import_collection(self,_filepath):
+        test = self.importers.import_file(_filepath)
+        print(test)
+        return test
+
+    #def edit_platform(self):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def start_scan(self, _folder='/Volumes/Bionded/Roms/gba'):
-        self.queue.put({'func': self.scan_folder, 'args': (_folder,), 'name': f'Scan {_folder}'})
+        self.queue.put({'func': self.__scan_folder, 'args': (_folder,), 'name': f'Scan {_folder}'})
 
-    def scan_folder(self, _folder):
+    def __scan_folder(self, _folder):
         for f in listdir(_folder):
             if isfile(join(_folder, f)):
                 self.files_dict[f] = self.md5(join(_folder, f))

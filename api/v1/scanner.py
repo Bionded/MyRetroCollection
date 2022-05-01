@@ -24,6 +24,13 @@ async def start_scan(folder):
     scanner.start_scan(test)
     return "Done"
 
+@scan_router.get("/import/{folder}")
+async def start_import(folder):
+    test = '/Volumes/Bionded/Roms/' + folder + '/gamelist.xml'
+
+    ret = scanner.import_collection(test)
+    return ret
+
 @scan_router.get("/returns")
 async def start_scan():
     return scanner.governor.get_result()

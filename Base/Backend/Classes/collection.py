@@ -2,9 +2,9 @@ import json
 from tinydb import TinyDB, Query,table
 from Base.Backend.Classes import rom
 
-class Base_platoform:
+class Collection:
     def __init__(self, _id=-1, _name='', _description='', _folder='', _full_name='',
-                 _developer='', _summary='', _release='', _extensions=''):
+                 _developer='', _summary='', _release='', _extensions='', _roms_db=''):
         self.id = _id
         self.name = _name
         self.description = _description
@@ -14,6 +14,7 @@ class Base_platoform:
         self.summary = _summary
         self.release = _release
         self.extensions = _extensions
+        self.roms_db = _roms_db
 
 
     def toJSON(self):
