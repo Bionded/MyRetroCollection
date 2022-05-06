@@ -3,51 +3,44 @@ import os
 import xmltodict, json
 from  os import path
 import logging
-from Base.Backend.Classes import rom, collection
+from Base.Backend.Classes.platform import Rom, Platform
 
 
 
 def _gamelist_export(_source = '',_filepath = ''):
     gamelist_comparsion = {
-        '@id': 'id',
-        'id': 'id',
-        'path': 'path',
-        'name': 'full_name',
-        'desc': 'description',
-        'image': 'screenshot_path',
-        'video': 'video_path',
-        'marquee': 'logo',
-        'thumbnail': 'boxart_path',
-        'rating':'rating',
-        'releasedate':'release',
-        'developer':'developer',
-        'publisher':'publisher',
-        'genre':'genre',
-        'players':'players',
-        'lang':'language',
-        'region':'region',
+        'path': '_path',
+        'name': '_full_name',
+        'desc': '_description',
+        'image': '_screenshot_path',
+        'video': '_video_path',
+        'marquee': '_logo',
+        'thumbnail': '_boxart_path',
+        'rating': '_rating',
+        'releasedate': '_release',
+        'developer': '_developer',
+        'publisher': '_publisher',
+        'genre': '_genre',
+        'players': '_players',
+        'lang': '_language',
+        'region': '_region',
     }
     folder_path = os.path.dirname(_filepath)
     temp_dict = xmltodict.parse(_source)['gameList']
-    temp_collection = collection.Collection()
     roms = []
-    if 'provider' in temp_dict.keys():
-        temp_collection.name = temp_dict['provider']['system']
     if 'game' in temp_dict.keys():
         for game in temp_dict['game']:
             temp_game_dict = dict()
-            temp_rom = rom.Rom()
+            temp_rom = Rom()
             for key in game.keys():
                 if key in gamelist_comparsion.keys():
                     temp_game_dict[gamelist_comparsion[key]] = game[key]
-            temp_game_dict['platform'] = temp_collection.name
-            temp_game_dict['full_path'] = os.path.join(folder_path, temp_game_dict['path'])
-            temp_rom.fromJSON(temp_game_dict)
-            temp_rom.md5()
+            temp_rom.fromDict(temp_game_dict)
+            temp_rom.setup(folder_path)
+            temp_rom.man_edit = True
             roms.append(temp_rom)
 
-
-    return {'collection':temp_collection,'roms': roms}
+    return roms
 
 
 def _pegasus_export(_source = '',_filepath = ''):

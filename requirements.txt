@@ -12,3 +12,9 @@ starlette~=0.17.1
 typing-extensions~=4.2.0
 uvicorn~=0.17.6
 wheel~=0.36.2
+
+filelock~=3.6.0
+xmltodict~=0.12.0
+tinydb~=4.7.0
+pysondb~=1.6.4
+watchdog~=2.1.7

@@ -1,25 +1,36 @@
 import time
-from Base.Backend.Classes import rom, collection, importer
-from tinydb import TinyDB, Query
+import json
+from Base.Backend.Classes import platform, importer, romdb
 import logging
 from Base import configger
-from os import listdir, makedirs
-from os.path import isfile, join, isdir, exists, splitext
-import hashlib
+import os
 from queue import Queue
 import threading
-from watchdog.observers import Observer
-from watchdog.events import PatternMatchingEventHandler
+import atexit
+
+supported_platforms = [
+    'gba',
+    'nes',
+    'snes',
+    'psx',
+    'psp',
+    'gb',
+    'gbc',
+    'megadrive',
+    'dreamcast',
+]
 
 class Rom_scanner:
     def __init__(self, _conf_path="config/base.conf", _logger=logging.getLogger("__main__")):
         self.logger = _logger
         self.scan_config = configger.Configger(_conf_path, "Scanner")
         self.base_rom_folder = self.scan_config.get("base_folder", "ROMS")
-        self.platform_dbs_dir = self.scan_config.get("platforms_db", "DB/platforms")
+        self.platforms_templates = self.load_templates()
         self.max_threads = self.scan_config.get_int("max_threads", 1)
-        self.platform_dbs = self.load_collections()
+        self.supported_platforms = self.scan_config.get("supported_platforms", []).strip('][').split(', ')
+        self.platforms = self.load_platoforms()
         self.importers = importer.Importer()
+        atexit.register(self.close_platform)
 
 
         self.files_dict = {}
@@ -35,48 +46,61 @@ class Rom_scanner:
 
     def daemon(self):
         while True:
-            time.sleep(2)
+            time.sleep(1)
             job = self.queue.get()
             thread = threading.Thread(target=job['func'], args=job['args'])
             thread.start()
             thread.join()
             self.queue.task_done()
 
-    def load_collections(self):
-        platforms = {}
-        configs = []
-        if not exists(self.platform_dbs_dir):
-            makedirs(self.platform_dbs_dir)
-        elif isdir(self.platform_dbs_dir):
-            configs = [f for f in listdir(self.platform_dbs_dir) if isfile(join(self.platform_dbs_dir, f))]
-        else:
-            self.logger.error(f"{self.platform_dbs_dir} may be folder! Not file")
+###########################################
 
-        if configs != []:
-            for conf in configs:
-                name = splitext(conf)[0]
-                try:
-                    platforms[name] = TinyDB(join(self.platform_dbs_dir, conf))
-                    self.logger.info(f"Platform {name} loaded!")
-                except Exception as e:
-                    self.logger.error(f"Error when {name} loading!")
-                    self.logger.error(f"{e}")
-        else:
-            self.logger.info("No db files for platforms")
+    def load_platoforms(self):
+        platforms = {}
+        for tplatform in self.supported_platforms:
+            filepath = os.path.join(self.base_rom_folder, tplatform, 'platform.json')
+            platforms[tplatform] = romdb.getDB(filepath)
+            if platforms[tplatform].get_platform() == platform.Platform():
+                new_platform = self.get_platform_template(tplatform)
+                platforms[tplatform].set_platform(new_platform)
+
+
         return platforms
 
-    def add_platform(self, _collection : collection.Collection):
-        if not exists(self.platform_dbs_dir):
-            makedirs(self.platform_dbs_dir)
-        self.platform_dbs[_collection.name] = TinyDB(join(self.platform_dbs_dir, _collection.name + '.json'))
+    def get_platform_template(self, name:str):
+        if name in self.platforms_templates.keys():
+            return platform.Platform().fromDict(self.platforms_templates[name])
+
+    def load_templates(self):
+        with open(self.scan_config.get("platform_templates", "DB/templates/platforms.json")) as json_file:
+            return json.load(json_file)
+
+    def close_platform(self):
+        for platform in self.platforms.values():
+            platform.close()
+
+    def import_collection(self, _filepath, platform_name):
+        self.queue.put({'func': self.__import_collection, 'args': (_filepath, platform_name,)})
+
+    def __import_collection(self, _filepath, platform_name):
+        try:
+            if platform_name in self.supported_platforms:
+                roms = self.importers.import_file(_filepath)
+                self.platforms[platform_name].addMany(roms)
+                return True
+            else:
+                return False
+        except Exception as e:
+            logging.error(f"Error: {e}")
+
+    def __scan_folder(self,folder):
+        result = [os.path.join(dp, f) for dp, dn, filenames in os.walk(folder) for f in filenames]
+
+    def __scan_platform(self, platform_name: str):
+        with self.platforms[platform_name].get_platform() as pltfrm:
+            path_to_platform = os.path.join(self.base_rom_folder, pltfrm.folder)
 
 
-    def import_collection(self,_filepath):
-        test = self.importers.import_file(_filepath)
-        print(test)
-        return test
-
-    #def edit_platform(self):
 
 
 
@@ -93,15 +117,16 @@ class Rom_scanner:
 
 
 
-    def start_scan(self, _folder='/Volumes/Bionded/Roms/gba'):
-        self.queue.put({'func': self.__scan_folder, 'args': (_folder,), 'name': f'Scan {_folder}'})
 
-    def __scan_folder(self, _folder):
-        for f in listdir(_folder):
-            if isfile(join(_folder, f)):
-                self.files_dict[f] = self.md5(join(_folder, f))
-
-        return "IAM FINISH!"
+    # def start_scan(self, _folder='/Volumes/Bionded/Roms/gba'):
+    #     self.queue.put({'func': self.__scan_folder, 'args': (_folder,), 'name': f'Scan {_folder}'})
+    #
+    # def __scan_folder(self, _folder):
+    #     for f in listdir(_folder):
+    #         if path.isfile(path.join(_folder, f)):
+    #             self.files_dict[f] = self.md5(path.join(_folder, f))
+    #
+    #     return "IAM FINISH!"
 
 
 

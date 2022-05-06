@@ -12,28 +12,10 @@ async def root(message=''):
     return {"message": scanner.send(message)}
 
 
-@scan_router.get("/start")
-async def start_scan():
-    scanner.start_scan()
-    return "Done"
-
-@scan_router.get("/start/{folder}")
-async def start_scan(folder):
-    test = '/Volumes/Bionded/Roms/' + folder
-
-    scanner.start_scan(test)
-    return "Done"
-
 @scan_router.get("/import/{folder}")
 async def start_import(folder):
     test = '/Volumes/Bionded/Roms/' + folder + '/gamelist.xml'
-
-    ret = scanner.import_collection(test)
-    return ret
-
-@scan_router.get("/returns")
-async def start_scan():
-    return scanner.governor.get_result()
+    ret = scanner.import_collection(test, folder)
 
 
 @scan_router.get("/files")
