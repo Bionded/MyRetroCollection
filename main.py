@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 import logging
 from api import apiv1
-from Base import logger, configger
+from Base import logger, config_manager
 # from Base.Backend.Classes import Platform, Rom
 from Base.Backend import scanner
 
@@ -11,7 +11,7 @@ from Base.Backend import scanner
 
 conf_path = "config/base.conf"
 main_logger = logger.load_logger(conf_path, _name=__name__)
-server = configger.Configger(conf_path, "Server")
+server = configger.Config_manager(conf_path, "Server")
 app = FastAPI()
 app.include_router(apiv1.api_v1_router)
 

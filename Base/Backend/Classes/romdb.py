@@ -76,7 +76,7 @@ logger.setLevel(logging.DEBUG)
 
 
 # util functions
-def create_db(filename: str,create_dirs:bool = True, create_file: bool = True) -> True:
+def create_db(filename: str, create_file: bool = True) -> True:
     def create(filename: str, data: str) -> None:
         if not os.path.exists(os.path.dirname(filename)):
             os.makedirs(os.path.dirname(filename))

@@ -14,7 +14,7 @@ async def root(message=''):
 
 @scan_router.get("/import/{folder}")
 async def start_import(folder):
-    test = '/Volumes/Bionded/Roms/' + folder + '/gamelist.xml'
+    test = '/Volumes/Bionded/Roms/gba/gamelist.xml'
     ret = scanner.import_collection(test, folder)
 
 
