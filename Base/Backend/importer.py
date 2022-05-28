@@ -1,5 +1,5 @@
 import os
-
+from Base.Backend.filesystem import getFS
 import xmltodict, json
 from  os import path
 import logging
@@ -11,7 +11,7 @@ def _pegasus_export(_source = '', _filepath = ''):
     return _source
 
 class Importer():
-    def __init__(self, fs, config=Config_manager(), logger=logging.getLogger("__backend__")):
+    def __init__(self, fs=getFS(), config=Config_manager(), logger=logging.getLogger("__backend__")):
         self.exporters = dict()
         self.file_types = dict()
         self.logger = logger
@@ -36,12 +36,14 @@ class Importer():
         if _set_exporter:
             if _set_exporter in self.exporters.keys():
                 import_val = self.exporters[_set_exporter](_source=source_data, _filepath=_filepath)
+                self.filesystem.rename_file(_filepath,'.' + self.filesystem.get_full_filename(_filepath))
             else:
                 self.logging.error(f"No Exporter with name '{_set_exporter}'!")
                 return None
 
         if filename in self.file_types.keys():
             import_val = self.file_types[filename](_source=source_data, _filepath=_filepath)
+            self.filesystem.rename_file(_filepath,'.' + self.filesystem.get_full_filename(_filepath))
         else:
             self.logging.error(f"No Exporter for filename '{filename}'!")
             return None

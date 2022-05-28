@@ -1,9 +1,9 @@
 import os
-from typing import Any, Callable, Dict, List, Union, Pattern, Type
 from Base.config_manager import Config_manager
 import logging
 import hashlib
 import shutil
+
 
 # def getFS(config=Config_manager(), logger=logging.getLogger("__backend__")):
 #     config = config.set_section('Filesystem')
@@ -16,7 +16,7 @@ class getFS:
     def __init__(self, config=Config_manager(), logger=logging.getLogger("__backend__")):
         self.config = config.set_section('Filesystem')
         self.logger = logger
-        self.base_folder = os.path.abspath(self.config.get("base_folder", '/Volumes/Bionded/Roms'))
+        self.base_folder = os.path.abspath(self.config.get("base_folder", 'Roms'))
         self._import_files = list()
 
 
@@ -33,6 +33,8 @@ class getFS:
         return os.path.abspath(os.path.join(*kwargs))
 
     def get_all_files(self, folder,extensions=None):
+        if not self.folder_exists(folder, create=True):
+            return None
         os.chdir(self.base_folder)
         workdir = self._path_join(self.base_folder, folder)
         roms = []
@@ -45,12 +47,13 @@ class getFS:
                     if os.path.splitext(filename)[1] in extensions:
                         temprom={'path': self._path_join(root, filename)}
                         roms.append(temprom)
+
         if len(import_files)>0:
             return {'roms': roms, 'imports': import_files}
         else:
             return {'roms': roms}
 
-    def file_exists(self, path):
+    def file_exists(self, path: str) -> bool:
         os.chdir(self.base_folder)
         if os.path.exists(path) and os.path.isfile(path):
             return True
@@ -89,6 +92,7 @@ class getFS:
     def get_file_ext(self,path):
         os.chdir(self.base_folder)
         return os.path.splitext(os.path.basename(path))[1]
+
     def get_filename(self, path):
         os.chdir(self.base_folder)
         return os.path.splitext(os.path.basename(path))[0]
@@ -106,7 +110,7 @@ class getFS:
         else:
             return None
 
-    def move_file(self,fpath, tpath):
+    def move_file(self, fpath, tpath):
         os.chdir(self.base_folder)
         newext = None
         if self.get_file_ext(fpath) !=self.get_file_ext(tpath):
@@ -125,6 +129,24 @@ class getFS:
             return None
         return tpath
 
+    def rename_file(self, fpath, new_name):
+        os.chdir(self.base_folder)
+        newpath = self._path_join(self.base_folder(fpath),new_name)
+        if self.file_exists(fpath) and self.folder_exists(os.path.dirname(newpath), create=True):
+            shutil.move(fpath, newpath)
+        else:
+            return None
+        return newpath
+
+    def remove(self,path):
+        if self.file_exists(path):
+            os.remove(path)
+            return True
+        if self.folder_exists(path):
+            shutil.rmtree(path)
+            return True
+        else:
+            return False
 
 
 
