@@ -1,3 +1,7 @@
+import requests
+
+gameUrl = "https://www.screenscraper.fr/api2/jeuInfos.php?devid=muldjord&devpassword=uWu5VRc9QDVMPpD8&softname=skyscraper"
+
 
 
 class ScreenScraper:
@@ -7,189 +11,189 @@ class ScreenScraper:
 
 
     def getPlatformID(self,platform):
-        if platform == "3do":
+        if platform.lower() == "3do":
             return "29"
-        elif platform == "3ds":
+        elif platform.lower() == "3ds":
             return "17"
-        elif platform == "amiga":
+        elif platform.lower() == "amiga":
             return "64"
-        elif platform == "aga":
+        elif platform.lower() == "aga":
             return "111"
-        elif platform == "cd32":
+        elif platform.lower() == "cd32":
             return "130"
-        elif platform == "cdtv":
+        elif platform.lower() == "cdtv":
             return "129"
-        elif platform == "amstradcpc":
+        elif platform.lower() == "amstradcpc":
             return "65"
-        elif platform == "apple2":
+        elif platform.lower() == "apple2":
             return "86"
-        elif platform == "arcade":
+        elif platform.lower() == "arcade":
             return "75"
-        elif platform == "arcadia":
+        elif platform.lower() == "arcadia":
             return "94"
-        elif platform == "astrocde":
+        elif platform.lower() == "astrocde":
             return "44"
-        elif platform == "atari800":
+        elif platform.lower() == "atari800":
             return "43"
-        elif platform == "atari2600":
+        elif platform.lower() == "atari2600":
             return "26"
-        elif platform == "atari5200":
+        elif platform.lower() == "atari5200":
             return "40"
-        elif platform == "atari7800":
+        elif platform.lower() == "atari7800":
             return "41"
-        elif platform == "atarijaguar":
+        elif platform.lower() == "atarijaguar":
             return "27"
-        elif platform == "atarijaguarcd":
+        elif platform.lower() == "atarijaguarcd":
             return "171"
-        elif platform == "atarilynx":
+        elif platform.lower() == "atarilynx":
             return "28"
-        elif platform == "atarist":
+        elif platform.lower() == "atarist":
             return "42"
-        elif platform == "atomiswave":
+        elif platform.lower() == "atomiswave":
             return "75"
-        elif platform == "c16":
+        elif platform.lower() == "c16":
             return "na"
-        elif platform == "c64":
+        elif platform.lower() == "c64":
             return "66"
-        elif platform == "c128":
+        elif platform.lower() == "c128":
             return "na"
-        elif platform == "channelf":
+        elif platform.lower() == "channelf":
             return "80"
-        elif platform == "coco":
+        elif platform.lower() == "coco":
             return "144"
-        elif platform == "coleco":
+        elif platform.lower() == "coleco":
             return "48"
-        elif platform == "daphne":
+        elif platform.lower() == "daphne":
             return "49"
-        elif platform == "dragon32":
+        elif platform.lower() == "dragon32":
             return "91"
-        elif platform == "dreamcast":
+        elif platform.lower() == "dreamcast":
             return "23"
-        elif platform == "easyrpg":
+        elif platform.lower() == "easyrpg":
             return "231"
-        elif platform == "fba":
+        elif platform.lower() == "fba":
             return "75"
-        elif platform == "fds":
+        elif platform.lower() == "fds":
             return "106"
-        elif platform == "gameandwatch":
+        elif platform.lower() == "gameandwatch":
             return "52"
-        elif platform == "gamegear":
+        elif platform.lower() == "gamegear":
             return "21"
-        elif platform == "gb":
+        elif platform.lower() == "gb":
             return "9"
-        elif platform == "gba":
+        elif platform.lower() == "gba":
             return "12"
-        elif platform == "gbc":
+        elif platform.lower() == "gbc":
             return "10"
-        elif platform == "gc":
+        elif platform.lower() == "gc":
             return "13"
-        elif platform == "genesis":
+        elif platform.lower() == "genesis":
             return "1"
-        elif platform == "intellivision":
+        elif platform.lower() == "intellivision":
             return "115"
-        elif platform == "mame-advmame":
+        elif platform.lower() == "mame-advmame":
             return "75"
-        elif platform == "mame-libretro":
+        elif platform.lower() == "mame-libretro":
             return "75"
-        elif platform == "mame-mame4all":
+        elif platform.lower() == "mame-mame4all":
             return "75"
-        elif platform == "mastersystem":
+        elif platform.lower() == "mastersystem":
             return "2"
-        elif platform == "megacd":
+        elif platform.lower() == "megacd":
             return "20"
-        elif platform == "megadrive":
+        elif platform.lower() == "megadrive":
             return "1"
-        elif platform == "moto":
+        elif platform.lower() == "moto":
             return "141"
-        elif platform == "msx":
+        elif platform.lower() == "msx":
             return "113"
-        elif platform == "msx2":
+        elif platform.lower() == "msx2":
             return "113"
-        elif platform == "n64":
+        elif platform.lower() == "n64":
             return "14"
-        elif platform == "naomi":
+        elif platform.lower() == "naomi":
             return "75"
-        elif platform == "nds":
+        elif platform.lower() == "nds":
             return "15"
-        elif platform == "neogeo":
+        elif platform.lower() == "neogeo":
             return "142"
-        elif platform == "neogeocd":
+        elif platform.lower() == "neogeocd":
             return "70"
-        elif platform == "nes":
+        elif platform.lower() == "nes":
             return "3"
-        elif platform == "ngp":
+        elif platform.lower() == "ngp":
             return "25"
-        elif platform == "ngpc":
+        elif platform.lower() == "ngpc":
             return "82"
-        elif platform == "openbor":
+        elif platform.lower() == "openbor":
             return "214"
-        elif platform == "oric":
+        elif platform.lower() == "oric":
             return "131"
-        elif platform == "pc":
+        elif platform.lower() == "pc":
             return "135"
-        elif platform == "pc88":
+        elif platform.lower() == "pc88":
             return "na"
-        elif platform == "pc98":
+        elif platform.lower() == "pc98":
             return "208"
-        elif platform == "pcfx":
+        elif platform.lower() == "pcfx":
             return "72"
-        elif platform == "pcengine":
+        elif platform.lower() == "pcengine":
             return "31"
-        elif platform == "pcenginecd":
+        elif platform.lower() == "pcenginecd":
             return "114"
-        elif platform == "pokemini":
+        elif platform.lower() == "pokemini":
             return "211"
-        elif platform == "ports":
+        elif platform.lower() == "ports":
             return "135"
-        elif platform == "ps2":
+        elif platform.lower() == "ps2":
             return "58"
-        elif platform == "psp":
+        elif platform.lower() == "psp":
             return "61"
-        elif platform == "psx":
+        elif platform.lower() == "psx":
             return "57"
-        elif platform == "saturn":
+        elif platform.lower() == "saturn":
             return "22"
-        elif platform == "scummvm":
+        elif platform.lower() == "scummvm":
             return "123"
-        elif platform == "sega32x":
+        elif platform.lower() == "sega32x":
             return "19"
-        elif platform == "segacd":
+        elif platform.lower() == "segacd":
             return "20"
-        elif platform == "sg-1000":
+        elif platform.lower() == "sg-1000":
             return "109"
-        elif platform == "snes":
+        elif platform.lower() == "snes":
             return "4"
-        elif platform == "switch":
+        elif platform.lower() == "switch":
             return "225"
-        elif platform == "ti99":
+        elif platform.lower() == "ti99":
             return "205"
-        elif platform == "trs-80":
+        elif platform.lower() == "trs-80":
             return "144"
-        elif platform == "vectrex":
+        elif platform.lower() == "vectrex":
             return "102"
-        elif platform == "vic20":
+        elif platform.lower() == "vic20":
             return "73"
-        elif platform == "videopac":
+        elif platform.lower() == "videopac":
             return "104"
-        elif platform == "virtualboy":
+        elif platform.lower() == "virtualboy":
             return "11"
-        elif platform == "wii":
+        elif platform.lower() == "wii":
             return "16"
-        elif platform == "wiiu":
+        elif platform.lower() == "wiiu":
             return "18"
-        elif platform == "wonderswan":
+        elif platform.lower() == "wonderswan":
             return "45"
-        elif platform == "wonderswancolor":
+        elif platform.lower() == "wonderswancolor":
             return "46"
-        elif platform == "x68000":
+        elif platform.lower() == "x68000":
             return "79"
-        elif platform == "x1":
+        elif platform.lower() == "x1":
             return "na"
-        elif platform == "zmachine":
+        elif platform.lower() == "zmachine":
             return "na"
-        elif platform == "zx81":
+        elif platform.lower() == "zx81":
             return "77"
-        elif platform == "zxspectrum":
+        elif platform.lower() == "zxspectrum":
             return "76"
         else:
             return "na"

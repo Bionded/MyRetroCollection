@@ -11,7 +11,6 @@ class Rom:
         self._description = _description
         self._md5sum = _md5sum
         self._sha1sum = _sha1sum
-        self._hashsum = self.gethash()
         self._path = _path
         self._full_name = _full_name
         self._genre = _genre
