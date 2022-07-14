@@ -1,6 +1,6 @@
 import logging
 import os
-from Base.config_manager import Config_manager
+from _Old.Base.config_manager import Config_manager
 
 def load_logger(Config=Config_manager(),_name="__main__"):
     conf = Config.set_section('Logs')

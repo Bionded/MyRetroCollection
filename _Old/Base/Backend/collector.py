@@ -1,15 +1,11 @@
-import time
 import json
-from Base.Backend.storage import SQLStorage
-from Base.Backend.importer import Importer
-from Base.Backend.scanner import FileScanner
-from Base.Backend.scanner import getFS
+from _Old.Base.Backend.storage import SQLStorage
+from _Old.Base.Backend.importer import Importer
+from _Old.Base.Backend.scanner import FileScanner
+from _Old.Base.Backend.scanner import getFS
 # from Base.Backend.scraper import Scraper
 import logging
-from Base.config_manager import Config_manager
-import os
-from queue import Queue
-import threading
+from _Old.Base.config_manager import Config_manager
 import re
 
 

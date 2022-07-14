@@ -1,11 +1,9 @@
-from Base.Backend import scanner, storage,collector,importer,scraper,filesystem
-from Base import config_manager
-from Base.logger import load_logger
-import logging
+from _Old.Base.Backend import filesystem, storage, scanner, importer, collector
+from _Old.Base import config_manager
+from _Old.Base.logger import load_logger
 from queue import Queue
 import threading
 import time
-import atexit
 
 
 class Backend:

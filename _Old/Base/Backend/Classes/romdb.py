@@ -8,12 +8,10 @@ import json
 import logging
 import os
 import re
-import warnings
-import uuid
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Union, Pattern
 from filelock import FileLock
-from Base.Backend.Classes.platform import Platform,Rom
+from _Old.Base.Backend.Classes.platform import Platform,Rom
 
 
 class IdNotFoundError(Exception):

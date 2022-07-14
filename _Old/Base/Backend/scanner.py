@@ -1,10 +1,7 @@
-import json
 import logging
-from Base.config_manager import Config_manager
-import os
+from _Old.Base.config_manager import Config_manager
 from queue import Queue
-import time
-from Base.Backend.filesystem import getFS
+from _Old.Base.Backend.filesystem import getFS
 
 class FileScanner:
     def __init__(self, filesystem=getFS(), config=Config_manager(), logger=logging.getLogger("__main__")):

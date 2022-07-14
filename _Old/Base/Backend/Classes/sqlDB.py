@@ -1,9 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean, create_engine, DateTime, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, create_engine, Float, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql import exists
 from sqlalchemy.ext.declarative import declarative_base
 import logging
-from Base.config_manager import Config_manager
 import os
 
 Base = declarative_base()
