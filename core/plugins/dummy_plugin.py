@@ -9,16 +9,20 @@ class dummy_plugin():
         self.license = "GPLv3"
         self.dependencies = []
         self.plugin_manager = plugin_manager
-        pass
+        self.logger = self.plugin_manager.logger
 
     def enable(self):
-        print(f"Plugin {self.name} enabled")
+        self.logger.info(self, f"Plugin {self.name} enabled")
 
     def disable(self):
-        print(f"Plugin {self.name} disabled")
+        self.logger.info(self, f"Plugin {self.name} disabled")
 
     def OnLoad(self):
-        print(f"Plugin {self.name} loaded")
+        self.logger.info(self, f"Plugin {self.name} loaded")
 
     def OnUnload(self):
-        print(f"Plugin {self.name} unloaded")
+        self.logger.info(self, f"Plugin {self.name} unloaded")
+
+    def OnTest(self, sender,test_string):
+        self.logger.info(self, f"Runned from {sender} Plugin {self.name} test: {test_string}")
+        return f"Runned from {sender} Test string: " + test_string

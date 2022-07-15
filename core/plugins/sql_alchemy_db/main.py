@@ -1,16 +1,3 @@
-
-class sql_alchemy_db():
-    def __init__(self, plugin_manager):
-        self.name = "sql_alchemy_db_plugin"
-        self.version = "0.0.1"
-        self.author = "Bionded"
-        self.description = "Plugin to provide interface fom db manger"
-        self.website = ""
-        self.license = "GPLv3"
-        self.dependencies = ['sqlalchemy']
-        self.plugin_manager = plugin_manager
-        pass
-
 from sqlalchemy import Column, Integer, String, Boolean, create_engine, Float, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql import exists
@@ -108,16 +95,26 @@ class romDec(Base):
 
 class sql_alchemy_db():
 
-    #def __init__(self, config: Configger, ):
-    def __init__(self,):
-        self.logging = logging.getLogger("__main__")
-        # self.config = config
-        # self.db_type = config.get()
+    def __init__(self, plugin_manager):
+        self.name = "sql_alchemy_db_plugin"
+        self.version = "0.0.1"
+        self.author = "Bionded"
+        self.description = "Plugin to provide interface fom db manger"
+        self.website = ""
+        self.license = "GPLv3"
+        self.dependencies = ['sqlalchemy']
+        self.plugin_manager = plugin_manager
+        self.configs = self.plugin_manager.configs
+        self.logger = self.plugin_manager.logger
         db_path = "DB/sqlite.db"
+
+    def enable(self):
         self.engine = create_engine('sqlite:///' + os.path.abspath(db_path))
         self.session = sessionmaker(bind=self.engine, autocommit=True)()
         self.base_class = Base
         self.base_class.metadata.create_all(self.engine)
+
+
 
     def add_platform(self, platform: dict):
         self.session.begin()

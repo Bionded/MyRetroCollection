@@ -1,114 +1,115 @@
 import configparser
+import os
 import logging
 
 
 class config_manager:
-    def __init__(self, core, _config_path='config/base.conf', _logger=logging.getLogger("__main__")):
-        self.config = configparser.ConfigParser(interpolation=None)
-        self.config_file = _config_path
-        self.config.read(self.config_file)
-        self.section = None
-        self.logger = _logger
-        self.logger.debug(msg=f"Config {self.section} initiated!")
-        if self.section not in self.config.sections():
-            self.logger.info(msg=f"In config file '{self.config_file}', Section '{self.section}' not exist!")
+    def __init__(self, core):
+        self.name = "config_manager"
+        self.default_config_folder = 'config'
+        self.default_config_file = 'retro_collection.conf'
+        self.__core = core
 
-    def set_section(self, section: str):
-        self.section = section
-        return self
 
-    def get(self, _param='def', _fallback=None):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def getConfig(self, caller):
+        return configs(caller, self)
+
+class configs:
+    def __init__(self, caller, config_manager):
+        self.name = caller.name + '_config'
+        self.__caller = caller
+        self.__config_manager = config_manager
+        self.logger = self.__caller.logger
+        self.config = configparser.ConfigParser()
         try:
-            value = self.config.get(self.section, _param, fallback=_fallback)
-            self.logger.info(f"Value: {value} from param {_param} in section {self.section}")
-            return value
-        except Exception as e:
-            self.logger.critical(f"Get value error: {e}", exc_info=True)
+            self.config_file = caller.config_file
+        except:
+            self.config_file = self.__config_manager.default_config_file
+        try:
+            self.section = caller.config_section
+        except:
+            try:
+                self.section = caller.name
+            except:
+                self.section = 'default'
+
+        self.config_file_path = os.path.join(self.__config_manager.default_config_folder, self.config_file)
+        self.reloadConfig()
+
+    def getValue(self, key,_fallback=None):
+        try:
+            self.logger.debug(self, f"Getting value for {key} from {self.config_file_path}")
+            return self.config.get(self.section, key, fallback=_fallback)
+        except:
+            self.logger.debug(self, f"Error getting value for {key} from {self.config_file_path}")
             return _fallback
 
-    def get_bool(self, _param='def', _fallback=None):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def setValue(self, key, value):
         try:
-            value = self.config.getboolean(self.section, _param, fallback=_fallback)
-            self.logger.info(f"Value: {value} from param {_param} in section {self.section}")
-            return value
-        except Exception as e:
-            self.logger.critical(f"Get value error: {e}", exc_info=True)
+            self.logger.debug(self, f"Setting value for {key} to {value} in {self.config_file_path}")
+            self.config.set(self.section, key, value)
+        except:
+            self.logger.debug(self, f"Error setting value for {key} to {value} in {self.config_file_path}")
+            return False
+        return True
+
+    def getBool(self, key, _fallback=None):
+        try:
+            self.logger.debug(self, f"Getting bool for {key} from {self.config_file_path}")
+            return self.config.getboolean(self.section, key, fallback=_fallback)
+        except:
+            self.logger.debug(self, f"Error getting bool for {key} from {self.config_file_path}")
             return _fallback
 
-    def get_int(self, _param='def', _fallback=None):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def getInt(self, key, _fallback=None):
         try:
-            value = self.config.getint(self.section, _param, fallback=_fallback)
-            self.logger.info(f"Value: {value} from param {_param} in section {self.section}")
-            return value
-        except Exception as e:
-            self.logger.critical(f"Get value error: {e}", exc_info=True)
+            self.logger.debug(self, f"Getting int for {key} from {self.config_file_path}")
+            return self.config.getint(self.section, key, fallback=_fallback)
+        except:
+            self.logger.debug(self, f"Error getting int for {key} from {self.config_file_path}")
             return _fallback
 
-    def set(self, _param='def', _value=None):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def getFloat(self, key, _fallback=None):
         try:
-            self.logger.debug(f"Set Value: {_value} on param {_param} in section {self.section}")
-            self.config.set(self.section, _param, _value)
-            self.save()
-            return True
-        except Exception as e:
-            self.logger.critical(f"Set value error: {e}", exc_info=True)
+            self.logger.debug(self, f"Getting float for {key} from {self.config_file_path}")
+            return self.config.getfloat(self.section, key, fallback=_fallback)
+        except:
+            self.logger.debug(self, f"Error getting float for {key} from {self.config_file_path}")
+            return _fallback
+
+
+    def getAllValues(self):
+        try:
+            self.logger.debug(self, f"Getting all values from {self.config_file_path}")
+            return self.config.items(self.section)
+        except:
+            self.logger.debug(self, f"Error getting all values from {self.config_file_path}")
             return False
 
-    def set_bool(self, _param='def', _value=True):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def getAllSections(self):
         try:
-            self.logger.debug(f"Set Value: {_value} on param {_param} in section {self.section}")
-            self.config.set(self.section, _param, str(_value))
-            self.save()
-            return True
-        except Exception as e:
-            self.logger.critical(f"Set value error: {e}", exc_info=True)
+            self.logger.debug(self, f"Getting all sections from {self.config_file_path}")
+            return self.config.sections()
+        except:
+            self.logger.error(self, f"Error getting all sections from {self.config_file_path}")
             return False
 
-    def set_int(self, _param='def', _value=0):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def saveConfig(self):
         try:
-            self.logger.debug(f"Set Value: {_value} on param {_param} in section {self.section}")
-            self.config.set(self.section, _param, str(_value))
-            self.save()
-            return True
-        except Exception as e:
-            self.logger.critical(f"Set value error: {e}", exc_info=True)
-            return False
-
-    def save(self):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
-        try:
-            with open(self.config_file, 'rw') as configfile:  # save
+            self.logger.debug(self, f"Saving {self.config_file_path}")
+            with open(self.config_file_path, 'w') as configfile:
                 self.config.write(configfile)
-            self.logger.info(f"Config save to file '{self.config_file}'Success!")
         except Exception as e:
-            self.logger.critical(f"Saving config error: {e}", exc_info=True)
+            self.logger.error(self, f"Error saving {self.config_file_path}")
+            self.logger.error(e)
+            return False
+        return True
 
-    def reload(self):
-        if not self.section:
-            self.logger.info(f"Section not configured. Please use .Section()")
-            return None
+    def reloadConfig(self):
         try:
-            self.config.read(self.config_file)
-            self.logger.info(f"Config reload from file '{self.config_file}'Success!")
-        except Exception as e:
-            self.logger.critical(f"Reload config error: {e}", exc_info=True)
+            self.logger.debug(self, f"Loading {self.config_file_path}")
+            self.config.read(self.config_file_path)
+        except:
+            self.logger.error(self, f"Error loading {self.config_file_path}")
+            return False
+        return True
