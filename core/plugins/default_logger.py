@@ -20,9 +20,9 @@ class default_logger():
         self.store_logger.remove_logger(type(self).__name__)
 
     def enable(self):
-        self.store_logger.add_logger(type(self).__name__)
         self.store_logger.updatePluginManager()
         self.logger = self._initLogger()
+        self.store_logger.add_logger(type(self).__name__)
 
     def _initLogger(self):
         log_file = self.configs.getValue('log_file', 'retro_collection.log')
@@ -47,21 +47,23 @@ class default_logger():
         logger.addHandler(handler)
         return logger
 
+
+
     def PreAnyLogger(self, sender, message):
         return f"{sender.name}: {message}"
 
+    def OnDebugLogger(self, sender, message):
+            self.logger.debug(message)
+
     def OnInfoLogger(self, sender, message):
-        self.logger.info(message)
+            self.logger.info(message)
 
     def OnWarningLogger(self, sender, message):
-        self.logger.warning(message)
+            self.logger.warning(message)
 
     def OnErrorLogger(self, sender, message):
-        self.logger.error(message)
+            self.logger.error(message)
 
-    def OnDebugLogger(self, sender, message):
-        self.logger.debug(message)
 
     def OnCriticalLogger(self, sender, message):
-        self.logger.critical(message)
-
+            self.logger.critical(message)

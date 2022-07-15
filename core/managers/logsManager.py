@@ -39,7 +39,7 @@ class logger:
         log_dir = self.default_log_folder
         formatting = '%(asctime)s %(levelname)-8s %(message)s'
         date_format = '%a, %d %b %Y %H:%M:%S'
-        level = "DEBUG"
+        level = "CRITICAL"
 
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
@@ -66,36 +66,36 @@ class logger:
         if len(self.logger_plugins) > 0 and self.plugin_manager:
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PreAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreInfoLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreInfoLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PreInfoLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnInfoLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnInfoLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnInfoLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostInfoLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostInfoLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostInfoLogger: {e}''')
         else:
@@ -105,36 +105,36 @@ class logger:
         if len(self.logger_plugins) > 0 and self.plugin_manager:
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin}in function PreAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreCriticalLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreCriticalLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PreCriticalLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnCriticalLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnCriticalLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnCriticalLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostCriticalLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostCriticalLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostCriticalLogger: {e}''')
         else:
@@ -144,36 +144,36 @@ class logger:
         if len(self.logger_plugins) > 0 and self.plugin_manager:
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin}in function PreAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreErrorLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreErrorLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PreErrorLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnErrorLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnErrorLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnErrorLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostErrorLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostErrorLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostErrorLogger: {e}''')
         else:
@@ -183,36 +183,36 @@ class logger:
         if len(self.logger_plugins) > 0 and self.plugin_manager:
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin}in function PreAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreWarningLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreWarningLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PreWarningLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnWarningLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnWarningLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnWarningLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostWarningLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostWarningLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostWarningLogger: {e}''')
         else:
@@ -222,36 +222,36 @@ class logger:
         if len(self.logger_plugins) > 0 and self.plugin_manager:
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreAnyLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin}in function PreAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    return_msg = self.logger_manager.plugin_manager.DoCommand(sender, 'PreDebugLogger', msg)
+                    return_msg = self.plugin_manager.DoCommand(sender, 'PreDebugLogger', msg)
                     if return_msg:
                         msg = return_msg
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PreDebugLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'OnDebugLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'OnDebugLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function OnDebugLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostAnyLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostAnyLogger: {e}''')
             for plugin in self.logger_plugins:
                 try:
-                    self.logger_manager.plugin_manager.DoCommand(sender, 'PostDebugLogger', msg)
+                    self.plugin_manager.DoCommand(sender, 'PostDebugLogger', msg)
                 except Exception as e:
                     self.fallback_logger.error(f'''Error in plugin {plugin} in function PostDebugLogger: {e}''')
         else:

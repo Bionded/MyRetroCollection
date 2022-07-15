@@ -21,6 +21,9 @@ class core:
         self.plugin_manager.enable()
 
     def test(self):
+        self.logger.info(self, "test info")
+        self.logger.debug(self, "test debug")
+        self.logger.error(self, "test error")
         print(self.plugin_manager.getAllPluginsInfo())
         self.plugin_manager.enablePlugin('default_logger')
         test = self.plugin_manager.DoCommand('core', 'OnTest','testing from core')
