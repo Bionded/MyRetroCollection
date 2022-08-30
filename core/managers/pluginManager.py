@@ -14,13 +14,16 @@ class plugin_manager():
         self.config = self.config_manager.getConfig(self)
         self.available_plugins = {}
         self.enabled_plugins = {}
-        self.plugin_folder = "core/plugins"
+        self.plugin_folder = os.path.join(self.__core.folder, "plugins")
         self.functions = {}
         self.getAvailablePlugins()
 
 
+
+
+
     def enable(self):
-        for plugin_name in self.config.getValue('enabledPlugins','').split(','):
+        for plugin_name in self.config.getValue('enabledPlugins', '').split(','):
             self.enablePlugin(plugin_name)
 
     def getAvailablePlugins(self):

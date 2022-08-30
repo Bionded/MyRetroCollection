@@ -3,13 +3,14 @@ from .managers.pluginManager import plugin_manager
 from .managers.logsManager import logs_manager
 from .managers.configManager import config_manager
 #from parts.collector import Collector
-
+from .parts.bus import *
 
 class core:
     def __init__(self):
         self.name = "core"
         self.config_section = "Core"
         self.version = "0.0.1"
+        self.folder = os.path.dirname(os.path.abspath(__file__))
         self.plugin_manager = None
         self.config_manager = None
         self.logs_manager = None
@@ -26,5 +27,5 @@ class core:
         self.logger.error(self, "test error")
         print(self.plugin_manager.getAllPluginsInfo())
         self.plugin_manager.enablePlugin('default_logger')
-        test = self.plugin_manager.DoCommand('core', 'OnTest','testing from core')
+        test = self.plugin_manager.DoCommand('core', 'OnTest', 'testing from core')
         print(test)

@@ -4,10 +4,12 @@ import os
 class logs_manager:
     def __init__(self,core):
         self.name = "logs_manager"
+        self.allowed_plugins_types = ['logger', 'plugin']
         self.__core = core
         self.config_manager = self.__core.config_manager
         self.plugin_manager = self.__core.plugin_manager
         self.logger_plugins = []
+        self.allowed_plugins_types = ['logger']
         self.logger = logger(self)
 
     def updatePluginManager(self):

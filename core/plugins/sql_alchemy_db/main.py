@@ -7,6 +7,130 @@ import os
 
 Base = declarative_base()
 
+class RomDec(Base):
+    __tablename__ = 'roms'
+
+    id = Column(Integer, primary_key=True,
+                unique=True,
+                autoincrement=True)
+    rom_size = Column(Integer)
+    rom_filename = Column(String)
+    platform_id = Column(Integer, ForeignKey('platforms.id'))
+    game = relationship('gameDec', backref='roms', lazy='subquery')
+    rom_crc = Column(String)
+    rom_md5 = Column(String)
+    rom_sha1 = Column(String)
+    beta = Column(Boolean)
+    demo = Column(Boolean)
+    proto = Column(Boolean)
+    hack = Column(Boolean)
+    unl = Column(Boolean)
+    rom_region = Column(Integer, ForeignKey('platforms.id'))
+
+    def __init__(self, options: dict = None):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return f'Rom {self.name}'
+
+    def update(self, options: dict):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def export(self):
+        exportdict = dict()
+        for key, value in self.__dict__.items():
+            if not key.startswith('_'):
+                exportdict[key] = value
+        return exportdict
+
+class regionDec(Base):
+    __tablename__ = 'regions'
+
+    id = Column(Integer, primary_key=True,
+                unique=True,
+                autoincrement=True)
+    region_full = Column(String)
+    region_short = Column(String)
+
+    def __init__(self, options: dict = None):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return f'Rom {self.name}'
+
+    def update(self, options: dict):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def export(self):
+        exportdict = dict()
+        for key, value in self.__dict__.items():
+            if not key.startswith('_'):
+                exportdict[key] = value
+        return exportdict
+
+class mediaDec(Base):
+    __tablename__ = 'media'
+
+    id = Column(Integer, primary_key=True,
+                unique=True,
+                autoincrement=True)
+    media_type = Column(String)
+    media_path = Column(String)
+    media_region = Column(Integer, ForeignKey('regions.id'))
+    media_size = Column(Integer)
+    media_format = Column(String)
+    media_crc = Column(String)
+    media_md5 = Column(String)
+    media_sha1 = Column(String)
+    media_parent = Column(String)
+
+    def __init__(self, options: dict = None):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return f'Rom {self.name}'
+
+    def update(self, options: dict):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def export(self):
+        exportdict = dict()
+        for key, value in self.__dict__.items():
+            if not key.startswith('_'):
+                exportdict[key] = value
+        return exportdict
+
+class genreDec(Base):
+    __tablename__ = 'genres'
+
+    id = Column(Integer, primary_key=True,
+                unique=True,
+                autoincrement=True)
+    genre_name = Column(String)
+
+    def __init__(self, options: dict = None):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return f'Rom {self.name}'
+
+    def update(self, options: dict):
+        for key, value in options.items():
+            setattr(self, key, value)
+
+    def export(self):
+        exportdict = dict()
+        for key, value in self.__dict__.items():
+            if not key.startswith('_'):
+                exportdict[key] = value
+        return exportdict
 
 class platformDec(Base):
     __tablename__ = 'platforms'
@@ -42,61 +166,35 @@ class platformDec(Base):
                 exportdict[key]=value
         return exportdict
 
-
-class romDec(Base):
-    __tablename__ = 'roms'
+class gameDec(Base):
+    __tablename__ = 'games'
 
     id = Column(Integer, primary_key=True,
                 unique=True,
                 autoincrement=True)
     name = Column(String)
+    publisher = Column(String)
+    developer = Column(String)
     platform_id = Column(Integer, ForeignKey('platforms.id'))
     platform = relationship('platformDec', backref='roms', lazy='subquery')
+    players = Column(String)
     description = Column(String)
-    full_name = Column(String)
-    developer = Column(String)
     release = Column(String)
+    genre_id = Column(String, ForeignKey('genres.id'))
+    genre = relationship('genreDec', lazy='subquery')
+    media = relationship('mediaDec',backref= lazy='subquery')
+    full_name = Column(String)
+    folder = Column(String)
+    developer = Column(String)
     extensions = Column(String)
-    md5sum = Column(String, unique=True)
-    sha1sum = Column(String, unique=True)
-    path = Column(String)
-    genre = Column(String)
-    rating = Column(Float)
-    language = Column(String)
-    publisher = Column(String)
-    players = Column(Integer)
-    boxart_path = Column(String)
-    screenshot_path = Column(String)
-    video_path = Column(String)
-    logo = Column(String)
-    region = Column(String)
-    man_edit = Column(Boolean)
-    scraped = Column(Boolean)
-    exists = Column(Boolean)
 
-    def __init__(self, options: dict = None):
-        for key, value in options.items():
-            setattr(self, key, value)
-
-    def __repr__(self):
-        return f'Rom {self.name}'
-
-    def update(self, options: dict):
-        for key, value in options.items():
-            setattr(self, key, value)
-
-    def export(self):
-        exportdict=dict()
-        for key, value in self.__dict__.items():
-            if not key.startswith('_'):
-                exportdict[key]=value
-        return exportdict
 
 
 class sql_alchemy_db():
 
     def __init__(self, plugin_manager):
         self.name = "sql_alchemy_db_plugin"
+        self.plugin_type = "database"
         self.version = "0.0.1"
         self.author = "Bionded"
         self.description = "Plugin to provide interface fom db manger"

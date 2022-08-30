@@ -3,6 +3,7 @@ import logging
 class default_logger():
     def __init__(self, plugin_manager):
         self.name = "Default Logger"
+        self.plugin.type = "logger"
         self.version = "0.0.1"
         self.author = "Bionded"
         self.description = "Default logger plugin"
