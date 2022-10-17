@@ -1,17 +1,20 @@
+from core.utils.types import PluginBody
 
-class dummy_plugin():
-    def __init__(self, plugin_manager):
-        self.name = "dummy_plugin"
-        self.version = "0.0.1"
-        self.author = "Bionded"
-        self.plugin_type = "core"
-        self.description = "This is a test plugin"
-        self.website = ""
-        self.license = "GPLv3"
-        self.dependencies = []
-        self.plugin_manager = plugin_manager
-        self.logger = self.plugin_manager.logger
 
+class dummy_plugin(PluginBody):
+    name = "dummy_plugin"   # Plugin name must be the same as file name and class name
+    version = "0.0.1"
+    author = "Bionded"
+    plugin_type = "dummy"
+    type = plugin_type
+    description = "This is a test plugin"
+    website = ""
+    different_log = True
+    log_file = "dummy.log"
+    license = "GPLv3"
+    dependencies = []
+
+    #Enable and disable function is required
     def enable(self):
         self.logger.info(self, f"Plugin {self.name} enabled")
 
@@ -25,5 +28,9 @@ class dummy_plugin():
         self.logger.info(self, f"Plugin {self.name} unloaded")
 
     def OnTest(self, sender, test_string):
-        self.logger.info(self, f"Runned from {sender} Plugin {self.name} test: {test_string}")
+        self.logger.info(self, f"Runned from '{sender}' Plugin {self.name} test: {test_string}")
+        return f"Runned from {sender} Test string: " + test_string
+
+    def OnInfoLogger(self, sender, test_string):
+        self.logger.info(self, f"Runned from '{sender}' Plugin {self.name} test: {test_string}")
         return f"Runned from {sender} Test string: " + test_string
