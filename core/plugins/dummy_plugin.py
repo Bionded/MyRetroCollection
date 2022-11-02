@@ -1,4 +1,4 @@
-from core.utils.types import PluginBody
+from core.utils.baseclass import PluginBody
 
 
 class dummy_plugin(PluginBody):
